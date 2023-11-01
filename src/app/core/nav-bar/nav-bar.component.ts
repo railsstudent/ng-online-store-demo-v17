@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { getCurrentUrlFn } from './utilities/currentUrl';
 
 @Component({
   selector: 'app-nav-bar',
@@ -8,7 +8,7 @@ import { NavigationEnd, Router, RouterLink } from '@angular/router';
   imports: [RouterLink],
   template: `
     <div>
-      @if (!['/', '/products'].includes(currentUrl)) {
+      @if (isShowBackButton) {
         <a routerLink="/">Back</a>
       } @else {
         <span>&nbsp;</span>
@@ -21,30 +21,24 @@ import { NavigationEnd, Router, RouterLink } from '@angular/router';
       background: goldenrod;
       height: 50px;
       padding: 0.25rem;
+      margin-bottom: 1rem;
 
       display: flex;
       justify-content: space-between;
       align-items: center;
-
-      margin-bottom: 1rem;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavBarComponent implements OnInit {
-  router = inject(Router);
-  destroyRef$ = inject(DestroyRef);
   cdr = inject(ChangeDetectorRef);
-  currentUrl = '';
+  isShowBackButton = false;
+  getCurrentUrl = getCurrentUrlFn();
 
   ngOnInit(): void {
-    this.router.events
-      .pipe(takeUntilDestroyed(this.destroyRef$))
-      .subscribe((e) => {
-        if (e instanceof NavigationEnd) {
-          this.currentUrl = (e as NavigationEnd).url;
-          this.cdr.markForCheck();
-        }
-      });
+    this.getCurrentUrl.subscribe((url) => {
+      this.isShowBackButton = !['/', '/products'].includes(url);
+      this.cdr.markForCheck();
+    });
   }
 }

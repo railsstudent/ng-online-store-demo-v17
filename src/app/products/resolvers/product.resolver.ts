@@ -8,8 +8,6 @@ export const productResolver: ResolveFn<Product | undefined> = (route: Activated
   const productId = route.paramMap.get('id');
   const productService = inject(ProductService);
 
-  console.log('product resolver called');
-
   if (!productId) {
     return of(undefined);
   }
