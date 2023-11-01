@@ -11,6 +11,8 @@ import { filter, map } from 'rxjs';
     <div>
       @if (!['/', '/products'].includes(currentUrl)) {
         <a routerLink="/">Back</a>
+      } @else {
+        <span>&nbsp;</span>
       }
       <a [routerLink]="['my-cart']">View Cart</a>
     </div>

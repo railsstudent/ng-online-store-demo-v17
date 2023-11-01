@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CartItemComponent } from '../cart-item/cart-item.component';
 import { CartTotalComponent } from '../cart-total/cart-total.component';
@@ -7,10 +6,10 @@ import { CartService } from '../services/cart.service';
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [NgFor, CartItemComponent, CartTotalComponent, NgIf],
+  imports: [CartItemComponent, CartTotalComponent],
   template: `
     <div class="cart">
-      <ng-container *ngIf="cart().length > 0 else emptyCart">
+      @if (cart().length > 0) {
         <div class="row">
           <p style="width: 10%">Id</p>
           <p style="width: 20%">Title</p>
@@ -19,14 +18,14 @@ import { CartService } from '../services/cart.service';
           <p style="width: 10%">Qty</p> 
           <p style="width: 10%">&nbsp;</p> 
         </div>
-
-        <app-cart-item *ngFor="let item of cart()" [item]="item" />
+        @for (item of cart(); track item.id) {
+          <app-cart-item [item]="item" />
+        }
         <app-cart-total />
-      </ng-container>
+      } @else {
+        <p>Your cart is empty, please buy something.</p>
+      }
     </div>
-    <ng-template #emptyCart>
-      <p>Your cart is empty, please buy something.</p>
-    </ng-template>
   `,
   styles: [`
     .row {
