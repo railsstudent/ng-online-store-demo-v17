@@ -8,7 +8,7 @@ import { NavBarComponent } from './core/nav-bar/nav-bar.component';
   imports: [NavBarComponent, RouterOutlet],
   template: `
   <div>
-    <h2>Signal Demo</h2>
+    <h2>Online Shop New Control Flow Demo</h2>
     <app-nav-bar />
     <router-outlet />
   </div>`,

@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
@@ -7,10 +6,12 @@ import { filter, map } from 'rxjs';
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
-  imports: [RouterLink, NgIf],
+  imports: [RouterLink],
   template: `
     <div>
-      <a *ngIf="!['/', '/products'].includes(currentUrl)" routerLink="/">Back</a>
+      @if (!['/', '/products'].includes(currentUrl)) {
+        <a routerLink="/">Back</a>
+      }
       <a [routerLink]="['my-cart']">View Cart</a>
     </div>
   `,
