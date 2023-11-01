@@ -9,7 +9,7 @@ import { ProductService } from '../services/product.service';
   standalone: true,
   imports: [ProductComponent],
   template: `
-    <div>.
+    <div>
       @for (product of products(); track product.id) {
         <app-product [product]="product" />
       }
