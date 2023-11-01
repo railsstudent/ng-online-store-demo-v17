@@ -23,6 +23,4 @@ import { NavBarComponent } from './core/nav-bar/nav-bar.component';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
-  title = 'ng-online-store-demo-v17';
-}
+export class AppComponent {}
