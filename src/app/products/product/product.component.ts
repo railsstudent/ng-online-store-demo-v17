@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Product } from '../product.interface';
-import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-product',
@@ -64,9 +63,6 @@ import { ProductService } from '../services/product.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductComponent {
-
   @Input({ required: true })
   product!: Product;
-
-  productService = inject(ProductService);
 }

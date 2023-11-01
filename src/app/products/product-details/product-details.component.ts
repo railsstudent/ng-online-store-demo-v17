@@ -1,9 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
-import { ProductService } from '../services/product.service';
-import { Product } from '../product.interface';
 import { TitleCasePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../carts/services/cart.service';
+import { Product } from '../product.interface';
 
 @Component({
   selector: 'app-product-details',
@@ -68,9 +67,7 @@ import { CartService } from '../../carts/services/cart.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailsComponent {
-  productService = inject(ProductService);
   cartService = inject(CartService);
-
   quantity = 1;
   
   @Input()
