@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
-import { filter, map } from 'rxjs';
 
 @Component({
   selector: 'app-nav-bar',
@@ -40,13 +39,12 @@ export class NavBarComponent implements OnInit {
 
   ngOnInit(): void {
     this.router.events
-      .pipe(
-        filter((e) => e instanceof NavigationEnd),
-        map((e) => e as NavigationEnd),
-        takeUntilDestroyed(this.destroyRef$)
-      ).subscribe((e) => {
-        this.currentUrl = e.url;
-        this.cdr.markForCheck();
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe((e) => {
+        if (e instanceof NavigationEnd) {
+          this.currentUrl = (e as NavigationEnd).url;
+          this.cdr.markForCheck();
+        }
       });
   }
 }
