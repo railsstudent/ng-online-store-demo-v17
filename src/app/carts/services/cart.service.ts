@@ -18,7 +18,7 @@ export class CartService {
     }
 
     return 0;
-  })
+  });
 
   summary = computed(() => {
     const results = this.cart().reduce(({ quantity, subtotal }, item) => {
