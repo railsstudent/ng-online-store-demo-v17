@@ -9,7 +9,7 @@ import { getCurrentUrlFn } from './utilities/currentUrl';
   template: `
     <div>
       @if (isShowBackButton) {
-        <a routerLink="/">Back</a>
+        <a routerLink="/">Home</a>
       } @else {
         <span>&nbsp;</span>
       }
