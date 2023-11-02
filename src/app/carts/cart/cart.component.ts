@@ -10,18 +10,24 @@ import { CartService } from '../services/cart.service';
   template: `
     <div class="cart">
       @if (cart().length > 0) {
-        <div class="row">
-          <p style="width: 10%">Id</p>
-          <p style="width: 20%">Title</p>
-          <p style="width: 40%">Description</p>
-          <p style="width: 10%">Price</p>
-          <p style="width: 10%">Qty</p> 
-          <p style="width: 10%">&nbsp;</p> 
-        </div>
-        @for (item of cart(); track item.id) {
-          <app-cart-item [item]="item" />
+        @defer {
+          <div class="row">
+            <p style="width: 10%">Id</p>
+            <p style="width: 20%">Title</p>
+            <p style="width: 40%">Description</p>
+            <p style="width: 10%">Price</p>
+            <p style="width: 10%">Qty</p> 
+            <p style="width: 10%">&nbsp;</p> 
+          </div>
+          @for (item of cart(); track item.id) {
+            <app-cart-item [item]="item" />
+          }
+          <app-cart-total />
+        } @loading (after 300ms; minimum 150ms) {
+          <p>Loading...</p>
+        } @placeholder (minimum 300ms) {
+          <p>No shopping cart</p>
         }
-        <app-cart-total />
       } @else {
         <p>Your cart is empty, please buy something.</p>
       }

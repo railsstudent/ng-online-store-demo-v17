@@ -10,33 +10,39 @@ import { Product } from '../product.interface';
   imports: [TitleCasePipe, FormsModule],
   template: `
     <div>
-      <div class="product">
-       <div class="row">
-          <img [src]="product?.image" [attr.alt]="product?.title || 'product image'"
-            width="200" height="200"
-           />
+      @defer {  
+        <div class="product">
+          <div class="row">
+            <img [src]="product?.image" [attr.alt]="product?.title || 'product image'"
+              width="200" height="200"
+            />
+          </div>
+          <div class="row">
+            <span>id:</span>
+            <span>{{ product?.id || '' }}</span>
+          </div>
+          <div class="row">
+            <span>Category: </span>
+            <span>{{ (product?.category || '') | titlecase }}</span>
+          </div>
+          <div class="row">
+            <span>Description: </span>
+            <span>{{ product?.description || '' }}</span>
+          </div>
+          <div class="row">
+            <span>Price: </span>
+            <span>{{ product?.price || '' }}</span>
+          </div> 
         </div>
-        <div class="row">
-          <span>id:</span>
-          <span>{{ product?.id || '' }}</span>
+        <div class="buttons">
+          <input type="number" class="order" min="1" [(ngModel)]="quantity" />
+          <button (click)="addItem()">Add</button>
         </div>
-        <div class="row">
-          <span>Category: </span>
-          <span>{{ (product?.category || '') | titlecase }}</span>
-        </div>
-        <div class="row">
-          <span>Description: </span>
-          <span>{{ product?.description || '' }}</span>
-        </div>
-        <div class="row">
-          <span>Price: </span>
-          <span>{{ product?.price || '' }}</span>
-        </div> 
-      </div>
-      <div class="buttons">
-        <input type="number" class="order" min="1" [(ngModel)]="quantity" />
-        <button (click)="addItem()">Add</button>
-      </div>
+      } @loading (after 300ms; minimum 150ms) {
+        <p>Loading....</p>
+      } @placeholder (minimum 300ms) {
+        <p>No product details</p>
+      }
     </div>
   `,
   styles: [`
