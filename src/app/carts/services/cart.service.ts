@@ -7,22 +7,30 @@ import { CartItem } from '../interfaces/cart.interface';
 })
 export class CartService {
   cart = signal<CartItem[]>([]);
+  promoCode = signal<string>('');
 
   total = computed(() => {
-    const results = this.cart().reduce(({ quantity, amount }, item) => {
+    const results = this.cart().reduce(({ quantity, subtotal }, item) => {
       const newQuantity = quantity + item.quantity;
-      const newAmount = amount + item.price * item.quantity;
+      const newSubtotal = subtotal + item.price * item.quantity;
 
       return { 
         quantity: newQuantity,
-        amount: newAmount
+        subtotal: newSubtotal
       }
-    }, { quantity: 0, amount: 0 });
+    }, { quantity: 0, subtotal: 0 });
+
+    const total = results.subtotal * ( 1 - this.discount()); 
 
     return { 
       quantity: results.quantity, 
-      amount: results.amount.toFixed(2)
+      amount: results.subtotal.toFixed(2),
+      total: total.toFixed(2),
     };
+  })
+
+  discount = computed(() => {
+    return this.promoCode() === 'DEVFESTHK2023' ? 0.2 : 0;
   })
 
   addItem(product: Product, quantity: number) {
