@@ -12,6 +12,8 @@ import { ProductService } from '../services/product.service';
     <div>
       @for (product of products(); track product.id) {
         <app-product [product]="product" />
+      } @empty {
+        <p>No product to purchase</p>
       }
     </div>
   `,
