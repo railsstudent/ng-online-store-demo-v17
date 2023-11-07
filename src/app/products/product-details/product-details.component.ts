@@ -1,5 +1,5 @@
 import { TitleCasePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../carts/services/cart.service';
 import { Product } from '../product.interface';
@@ -13,9 +13,7 @@ import { Product } from '../product.interface';
       @defer {  
         <div class="product">
           <div class="row">
-            <img [src]="product?.image" [attr.alt]="product?.title || 'product image'"
-              width="200" height="200"
-            />
+            <img [src]="product?.image" [attr.alt]="product?.title || 'product image'" width="200" height="200" />
           </div>
           <div class="row">
             <span>id:</span>
@@ -35,7 +33,7 @@ import { Product } from '../product.interface';
           </div> 
         </div>
         <div class="buttons">
-          <input type="number" class="order" min="1" [(ngModel)]="quantity" />
+          <input type="number" class="order" min="1" [ngModel]="quantity()" (ngModelChange)="quantity.set($event)" />
           <button (click)="addItem()">Add</button>
         </div>
       } @loading (after 300ms; minimum 150ms) {
@@ -73,15 +71,15 @@ import { Product } from '../product.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailsComponent {
-  cartService = inject(CartService);
-  quantity = 1;
-  
   @Input()
   product?: Product | undefined = undefined; 
 
+  cartService = inject(CartService);
+  quantity = signal(1);
+  
   addItem() {
     if (this.product) {
-      this.cartService.addItem(this.product, this.quantity);
+      this.cartService.addItem(this.product, this.quantity());
     }
   }
 }
