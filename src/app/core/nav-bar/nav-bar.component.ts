@@ -1,14 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { getCurrentUrlFn } from './utilities/currentUrl';
+import { tap } from 'rxjs';
+import { isCurrentUrlIncludedFn } from './utilities/is-current-url-included';
 
 @Component({
   selector: 'app-nav-bar',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, AsyncPipe],
   template: `
     <div>
-      @if (isShowBackButton) {
+      @if (isShowHomeButton$ | async) {
         <a routerLink="/">Home</a>
       } @else {
         <span>&nbsp;</span>
@@ -30,15 +32,8 @@ import { getCurrentUrlFn } from './utilities/currentUrl';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent {
   cdr = inject(ChangeDetectorRef);
-  isShowBackButton = false;
-  getCurrentUrl = getCurrentUrlFn();
-
-  ngOnInit(): void {
-    this.getCurrentUrl.subscribe((url) => {
-      this.isShowBackButton = !['/', '/products'].includes(url);
-      this.cdr.markForCheck();
-    });
-  }
+  isShowHomeButton$ = isCurrentUrlIncludedFn('/', '/products')
+    .pipe(tap(() => this.cdr.markForCheck()));
 }
