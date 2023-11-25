@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavBarComponent } from './core/nav-bar/nav-bar.component';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -23,4 +24,8 @@ import { NavBarComponent } from './core/nav-bar/nav-bar.component';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor(titleService: Title) {
+    titleService.setTitle('Angular 17 Online Store Demo');
+  }
+}
