@@ -46,36 +46,28 @@ export class CartService {
   addItem(product: Product, quantity: number) {
     const idx = this.cart().findIndex((item) => item.id === product.id);
     if (idx >= 0) {
-      const updatedCart = this.cart().map((item) => {
-        if (item.id === product.id) {
-          return { ...item, quantity: item.quantity + quantity };
-        }
-        return item;
+      this.cart.update((oldCart) => {
+        const oldItem = oldCart[idx];
+        const newQuantity = oldItem.quantity + quantity;
+        oldCart.splice(idx, 1, {...oldItem, quantity: newQuantity });
+        return oldCart;
       });
-      this.cart.set(updatedCart);
     } else {
-      this.cart.set([...this.cart(), { ...product, quantity }]);
+      this.cart.update((cartItems) => ([...cartItems, { ...product, quantity }]));
     }
   }
 
   deleteItem(id: number) {
-    const updatedCart = this.cart().filter((item) => item.id !== id);
-    this.cart.set(updatedCart);
+    this.cart.update((cartItems) => cartItems.filter((item) => item.id !== id));
   }
 
   updateItem(id: number, quantity: number) {
     if (quantity <= 0) {
       this.deleteItem(id);
-    } else {
-      const updatedCart = this.cart().map((item) => {
-        if (item.id === id) {
-          return { ...item, quantity };
-        }
-
-        return item;
-      });
-      
-      this.cart.set(updatedCart);
+    } else {  
+      this.cart.update((cartItems) => 
+        cartItems.map((item) => item.id === id ? { ...item, quantity } : item)
+      );
     }
   }
 }
